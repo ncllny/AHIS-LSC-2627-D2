@@ -88,7 +88,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 .phase-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.04em;background:var(--amb);border:1px solid var(--am);color:var(--amt);}
 .phase-dot{width:7px;height:7px;border-radius:50%;background:var(--am);animation:glow 1.2s infinite;}
 
-/* D-PAD */
+/* DPAD AREA */
 .dpad-area{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:4px;}
 .dpad-row{display:flex;gap:4px;}
 .dpad{
@@ -102,20 +102,35 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 .dpad-mid{width:58px;height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:600;color:var(--amt);line-height:1.1;}
 .dpad-mid small{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;}
 
-/* info boxes */
+/* INFO BOXES */
 .info-row{display:flex;gap:6px;}
 .info-box{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 10px;text-align:center;}
 .info-val{font-size:20px;font-weight:600;font-family:var(--mono);color:var(--amt);}
 .info-lbl{font-size:9px;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-top:2px;}
 
-/* team grid */
+/* Steps Left Highlight Emphasis */
+.info-box.steps-highlight {
+  background: linear-gradient(135deg, rgba(240,168,64,0.25) 0%, var(--s2) 100%);
+  border: 2px solid var(--am);
+  box-shadow: 0 0 10px rgba(240, 168, 64, 0.2);
+}
+.info-box.steps-highlight .info-val {
+  font-size: 28px;
+  color: var(--am);
+  text-shadow: 0 0 8px rgba(240, 168, 64, 0.4);
+}
+.info-box.steps-highlight .info-lbl {
+  color: var(--amt);
+  font-weight: 600;
+}
+
+/* TEAM GRID */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:5px;}
 .tbtn{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 10px;cursor:pointer;font-family:var(--font);font-size:12px;font-weight:500;color:var(--tx);transition:border-color .13s,background .13s;display:flex;align-items:center;gap:5px;}
 .tbtn:hover{background:var(--s3);border-color:var(--bd2);}
 .tbtn.sel{border-color:var(--am);background:var(--amb);color:var(--amt);}
-.tbtn .tsub{font-family:var(--mono);font-size:10px;color:var(--mu);margin-left:auto;flex-shrink:0;}
 
-/* voyage log */
+/* VOYAGE LOG */
 .vlog{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);max-height:140px;overflow-y:auto;font-family:var(--mono);font-size:11px;}
 .vlog-row{display:flex;gap:7px;padding:5px 9px;border-bottom:1px solid var(--bd);}
 .vlog-row:last-child{border:none;}
@@ -124,7 +139,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 .vlog-msg.hit{color:var(--rdt);}
 .vlog-msg.done{color:var(--gnt);}
 
-/* ── SHIP FOUND MODAL ── */
+/* SHIP FOUND MODAL */
 #ship-modal{
   display:none;position:fixed;inset:0;z-index:500;
   background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
@@ -137,14 +152,16 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
   animation:modalin .3s cubic-bezier(.34,1.56,.64,1);
 }
 @keyframes modalin{0%{transform:scale(.7);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.ship-modal-box .boom{font-size:56px;margin-bottom:8px;}
 .ship-modal-box h2{font-family:var(--display);font-size:18px;color:var(--rdt);letter-spacing:.06em;margin-bottom:6px;}
 .ship-modal-box p{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.5;}
 .ship-modal-box .coords{font-family:var(--mono);font-size:22px;font-weight:600;color:var(--amt);margin-bottom:18px;}
 
-/* ── SETTINGS LAYOUT ── */
+/* SETTINGS LAYOUT */
 .settings-layout{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start;}
 @media(max-width:860px){.settings-layout{grid-template-columns:1fr;}}
 
+/* MINI GRID */
 .mini-cell{
   width:30px;height:30px;border-radius:3px;cursor:pointer;
   background:var(--s2);border:1px solid var(--bd);
@@ -154,6 +171,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 }
 .mini-cell:hover{background:var(--s3);border-color:var(--bd2);}
 
+/* TOOL PALETTE */
 .palette{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
 .pal-opt{
   width:38px;height:38px;border-radius:var(--r);cursor:pointer;
@@ -164,7 +182,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 .pal-opt:hover{transform:scale(1.12);}
 .pal-opt.sel{border-color:var(--am);background:var(--amb);}
 
-/* leaderboard */
+/* LEADERBOARD */
 .lb{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;}
 .lbrow{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--bd);transition:background .1s;}
 .lbrow:last-child{border:none;}
@@ -176,6 +194,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 .lbpts{font-size:17px;font-weight:600;font-family:var(--mono);text-align:right;min-width:46px;color:var(--glt);}
 .lbpts small{font-size:10px;color:var(--mu);font-weight:400;display:block;text-align:right;}
 
+/* TEAM EDITOR */
 .team-edit-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);}
 .team-edit-row:last-child{border:none;}
 .team-edit-row input{flex:1;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:6px 10px;color:var(--tx);font-family:var(--font);font-size:13px;}
@@ -200,7 +219,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
   <div class="spill"><div class="sdot w" id="sdot"></div><span id="slabel">Connecting…</span></div>
 </header>
 
-<nav>
+<nav id="navbar">
   <div class="ntab on"  onclick="go('voyage')">⚓ Voyage</div>
   <div class="ntab"     onclick="go('board')">🏆 Leaderboard</div>
   <div class="ntab"     onclick="go('settings')">⚙️ Settings</div>
@@ -242,7 +261,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
       <div id="dpad-container" style="display:none;margin-top:12px;">
         <div style="background:var(--s1);border:1px solid var(--bd2);border-radius:var(--rl);padding:14px;width:max-content;">
           <div class="info-row" style="margin-bottom:12px;min-width:230px;">
-            <div class="info-box"><div class="info-val" id="steps-left">0</div><div class="info-lbl">Steps left</div></div>
+            <div class="info-box steps-highlight"><div class="info-val" id="steps-left">0</div><div class="info-lbl">Steps left</div></div>
             <div class="info-box"><div class="info-val" id="ships-found" style="color:var(--glt);">0</div><div class="info-lbl">Ships found</div></div>
             <div class="info-box"><div class="info-val" id="pos-display" style="font-size:15px;">—</div><div class="info-lbl">Position</div></div>
           </div>
@@ -315,6 +334,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -327,7 +347,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
   <div class="settings-layout">
     <div>
       <div class="card" style="margin-bottom:14px;">
-        <div class="ttl" style="margin-bottom:8px;">Fleet map editor — 10×10 grid</div>
+        <div class="ttl" style="margin-bottom:8px;">Fleet map editor</div>
         <p style="font-size:12px;color:var(--mu);margin-bottom:12px;">Click cells to place/remove. Ships are hidden from crews during voyages.</p>
         <div class="ttl" style="margin-bottom:6px;">Active tool</div>
         <div class="palette" id="tool-palette"></div>
@@ -343,6 +363,18 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--mu);" id="ship-count-label"></div>
       </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="ttl" style="margin-bottom:8px;">Grid Configuration</div>
+        <p style="font-size:12px;color:var(--mu);margin-bottom:12px;">Adjust the layout dimension of the expedition map. <strong>Note: Changing size clears current placement state!</strong></p>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <label style="font-size:13px;color:var(--tx);" for="grid-size-inp">Grid Dimension:</label>
+          <input type="number" id="grid-size-inp" value="10" min="5" max="20"
+            style="width:70px;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:6px 10px;color:var(--amt);font-family:var(--mono);font-size:14px;font-weight:600;text-align:center;">
+          <button class="btn am" onclick="changeGridSize()">Update Dimensions ⚓</button>
+        </div>
+      </div>
+
       <div class="card">
         <div class="ttl" style="margin-bottom:8px;">Danger zone</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -352,6 +384,7 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
         </div>
       </div>
     </div>
+
     <div>
       <div class="card" style="margin-bottom:14px;">
         <div class="ttl" style="margin-bottom:8px;">Teams</div>
@@ -361,13 +394,15 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
           <button class="btn gn" onclick="addTeam()">+ Add team</button>
         </div>
       </div>
+
       <div class="card" style="margin-bottom:14px;">
         <div class="ttl" style="margin-bottom:8px;">Legend</div>
         <div style="font-size:12px;line-height:2;" id="legend-list"></div>
       </div>
+
       <div class="card">
         <div class="ttl" style="margin-bottom:8px;">Fleet stats</div>
-        <div id="fleet-stats" style="font-size:12px;color:var(--mu);line-height:1.9;font-family:var(--mono);"></div>
+        <div id="fleet-stats" style="font-size:12px;color:var(--mu);line-height:1.9;font-family:var(--mono);white-space:pre-wrap;"></div>
       </div>
     </div>
   </div>
@@ -377,8 +412,8 @@ nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;displa
 </div>
 
 <script>
-const COLS = ['A','B','C','D','E','F','G','H','I','J'];
-const GRID  = 10;
+const COLS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'];
+let GRID  = 10;
 const FB    = 'https://ahis-lsc-2627-d2-default-rtdb.asia-southeast1.firebasedatabase.app/pirate_fleet';
 
 const LANDMARKS = [
@@ -415,27 +450,65 @@ let voyage = {
   phase:'select-team',
 };
 
+function go(view) {
+  document.querySelectorAll('.view').forEach(e => e.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(e => e.classList.remove('on'));
+  
+  const targetView = document.getElementById('view-' + view);
+  if(targetView) targetView.classList.add('on');
+  
+  const tabs = document.querySelectorAll('.ntab');
+  if(view === 'voyage') tabs[0].classList.add('on');
+  if(view === 'board') tabs[1].classList.add('on');
+  if(view === 'settings') tabs[2].classList.add('on');
+  
+  if(view === 'settings') {
+    renderMiniGrid();
+    renderTeamEditor();
+    renderFleetStats();
+    renderToolPalette();
+    renderLegend();
+  }
+  if(view === 'board') {
+    renderBoard();
+  }
+}
+
 function mkDefault(){
   const teams = DEFAULT_TEAMS.map((name,i)=>({id:i,name,points:0,shipsFound:0,stepsUsed:0,voyagesDone:0}));
-  const grid  = Array(100).fill(null);
-  return{teams,grid,version:0,updatedAt:Date.now()};
+  return{teams,grid:Array(GRID*GRID).fill(null),gridSize:GRID,version:0,updatedAt:Date.now()};
 }
 
 function ensureSchema(d){
-  if(!d)return mkDefault();
-  
-  // FIXED: Safely parsing coerced standard array or sparse object configurations from Firebase
-  let finalGrid = Array(100).fill(null);
-  if(d.grid){
-    for(let i=0; i<100; i++){
-      if(d.grid[i] !== undefined && d.grid[i] !== null){
-        finalGrid[i] = d.grid[i];
+  if(!d) return mkDefault();
+  const size = d.gridSize || 10;
+  GRID = size;
+  const sizeInput = document.getElementById('grid-size-inp');
+  if(sizeInput) sizeInput.value = size;
+
+  const totalCells = size * size;
+  if(!d.grid) {
+    d.grid = Array(totalCells).fill(null);
+  } else if(Array.isArray(d.grid)) {
+    if(d.grid.length !== totalCells) {
+      const newGrid = Array(totalCells).fill(null);
+      for(let i = 0; i < Math.min(d.grid.length, totalCells); i++) {
+        newGrid[i] = d.grid[i];
+      }
+      d.grid = newGrid;
+    }
+  } else {
+    const newGrid = Array(totalCells).fill(null);
+    for(let i = 0; i < totalCells; i++) {
+      if(d.grid[i] !== undefined) {
+        newGrid[i] = d.grid[i];
       }
     }
+    d.grid = newGrid;
   }
-  d.grid = finalGrid;
-  
-  if(typeof d.version!=='number')d.version=0;
+
+  if(typeof d.version!=='number') d.version=0;
+  d.gridSize = size;
   d.teams=(d.teams||[]).map((t,i)=>({
     id:typeof t.id==='number'?t.id:i,
     name:t.name||DEFAULT_TEAMS[i]||'Team '+(i+1),
@@ -457,8 +530,7 @@ async function fbGet(){
     const r=await fetch(FB+'.json',{headers:{Accept:'application/json'}});
     if(!r.ok)return null;
     const etag=r.headers.get('ETag')||'';
-    const data=await r.json();
-    return{data,etag};
+    return{data:await r.json(),etag};
   }catch(e){return null;}
 }
 async function fbPut(data,etag){
@@ -476,8 +548,11 @@ function applyOp(state,op){
   const s=JSON.parse(JSON.stringify(state));
   if(op.type==='setGrid'){
     s.grid[op.idx]=op.val;
+  }else if(op.type==='changeGridSize'){
+    s.gridSize=op.size;
+    s.grid=Array(op.size*op.size).fill(null);
   }else if(op.type==='clearGrid'){
-    if(op.target==='all')s.grid=Array(100).fill(null);
+    if(op.target==='all')s.grid=Array(GRID*GRID).fill(null);
     else if(op.target==='ship')s.grid=s.grid.map(v=>v==='ship'?null:v);
     else if(op.target==='landmark')s.grid=s.grid.map(v=>v&&v!=='ship'?null:v);
   }else if(op.type==='recordVoyage'){
@@ -493,7 +568,7 @@ function applyOp(state,op){
   }else if(op.type==='resetPoints'){
     s.teams.forEach(t=>{t.points=0;});
   }else if(op.type==='resetAll'){
-    const f=mkDefault();s.teams=f.teams;s.grid=f.grid;
+    const f=mkDefault();s.teams=f.teams;s.grid=f.grid;s.gridSize=GRID;
   }
   s.version=(s.version||0)+1;
   s.updatedAt=Date.now();
@@ -531,20 +606,10 @@ function setSS(s,lbl){
 }
 let ct;function showConflict(){const b=document.getElementById('conflict-banner');b.classList.add('on');clearTimeout(ct);ct=setTimeout(()=>b.classList.remove('on'),3500);}
 
-const VIEWS=['voyage','board','settings'];
-function go(v){
-  document.querySelectorAll('.ntab').forEach((el,i)=>el.classList.toggle('on',VIEWS[i]===v));
-  document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));
-  document.getElementById('view-'+v).classList.add('on');
-  if(v==='board')renderBoard();
-  if(v==='settings'){renderToolPalette();renderMiniGrid();renderTeamEditor();renderFleetStats();renderLegend();}
-  if(v==='voyage')renderSeaGrid();
-}
-
 function renderSeaGrid(){
   const clr=document.getElementById('col-labels-row');
   clr.innerHTML=`<div style="width:22px;flex-shrink:0;"></div>`+
-    COLS.map(c=>`<div class="col-label" style="width:36px;height:16px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--mu);">${c}</div>`).join('');
+    COLS.slice(0, GRID).map(c=>`<div class="col-label">${c}</div>`).join('');
 
   const sg=document.getElementById('sea-grid');
   sg.innerHTML='';
@@ -607,8 +672,7 @@ function onCellClick(r,c){
 function renderTeamPanel(){
   document.getElementById('team-grid').innerHTML=DB.teams.map(t=>
     `<button class="tbtn${voyage.teamId===t.id?' sel':''}" onclick="selectTeam(${t.id})">
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${t.name}</span>
-      <span class="tsub">${(t.points||0).toFixed(0)}pt</span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:left;">${t.name}</span>
     </button>`
   ).join('');
 }
@@ -747,7 +811,7 @@ function finishVoyage(){
     `${tname} · ${pts} ship${pts!==1?'s':''} found · ${stepsUsed} steps used`;
   const op={type:'recordVoyage',teamId:voyage.teamId,points:pts,shipsFound:voyage.hits.length,stepsUsed};
   DB=applyOp(DB,op);lsSave(DB);atomicWrite(op);
-  addLog(`Campania done — ${pts} pts earned`,'done');
+  addLog(`Voyage done — ${pts} pts earned`,'done');
   ['d-up','d-down','d-left','d-right'].forEach(id=>document.getElementById(id).disabled=true);
 }
 
@@ -802,6 +866,22 @@ function renderBoard(){
   ).join('');
 }
 
+function changeGridSize(){
+  const val = parseInt(document.getElementById('grid-size-inp').value) || 10;
+  if(val < 5 || val > 20) { toast('Dimensions must be between 5 and 20!'); return; }
+  if(!confirm(`Resize fleet grid to ${val}×${val}? This will completely clear your active map configuration.`)) return;
+  
+  GRID = val;
+  const op = { type: 'changeGridSize', size: val };
+  DB = applyOp(DB, op);
+  lsSave(DB);
+  atomicWrite(op);
+  resetVoyage();
+  renderMiniGrid();
+  renderSeaGrid();
+  toast(`Dimensions adjusted to ${val}×${val}`);
+}
+
 function renderToolPalette(){
   const pal=document.getElementById('tool-palette');
   pal.innerHTML=TOOLS.map(t=>
@@ -827,7 +907,7 @@ function updateToolInfo(){
 function renderMiniGrid(){
   const mcl=document.getElementById('mini-col-labels');
   mcl.innerHTML=`<div style="width:22px;flex-shrink:0;"></div>`+
-    COLS.map(c=>`<div style="width:30px;height:14px;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--mono);color:var(--mu);">${c}</div>`).join('');
+    COLS.slice(0, GRID).map(c=>`<div style="width:30px;height:14px;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--mono);color:var(--mu);">${c}</div>`).join('');
 
   const mg=document.getElementById('mini-grid');
   mg.innerHTML='';
@@ -870,9 +950,8 @@ function miniToggle(r,c){
   let newVal=null;
   if(activeTool==='clear') newVal=null;
   else if(activeTool==='ship') newVal=cur==='ship'?null:'ship';
-  else{
-    newVal=cur===activeTool?null:activeTool;
-  }
+  else newVal=cur===activeTool?null:activeTool;
+  
   const op={type:'setGrid',idx,val:newVal};
   DB=applyOp(DB,op);lsSave(DB);
   const cell=document.getElementById(`mc-${r}-${c}`);
@@ -896,7 +975,7 @@ function renderFleetStats(){
   const el=document.getElementById('fleet-stats');
   if(el)el.innerHTML=`⚓ ${ships} ship square${ships!==1?'s':''}\n`+
     landmarks.map(x=>`${x.lm.emoji} ${x.count} ${x.lm.label}`).join('\n')+
-    `\n${100-ships-landmarks.reduce((a,x)=>a+x.count,0)} empty squares`;
+    `\n${(GRID*GRID)-ships-landmarks.reduce((a,x)=>a+x.count,0)} empty squares`;
   const sc=document.getElementById('ship-count-label');
   if(sc)sc.textContent=`${ships} ship squares · ${landmarks.reduce((a,x)=>a+x.count,0)} landmark tiles`;
 }
@@ -932,6 +1011,7 @@ function saveTeamNames(){
   renderTeamPanel();toast('Team names saved');
 }
 
+// Danger Zone Controls
 function addTeam(){
   const newId=DB.teams.length>0?Math.max(...DB.teams.map(t=>t.id))+1:0;
   const newTeam={id:newId,name:'Team '+(newId+1),points:0,shipsFound:0,stepsUsed:0,voyagesDone:0};
@@ -972,18 +1052,13 @@ function toast(m){const e=document.getElementById('toast');e.textContent=m;e.cla
   renderAll();
   setSS('w','Connecting…');
   const got=await fbGet();
-  if(got){
-    if(got.data){
-      const remote=ensureSchema(got.data);
-      if((remote.version||0)>=(DB.version||0)){DB=remote;lsSave(DB);renderAll();}
-      else await fbPut(DB,got.etag);
-    } else {
-      // FIXED: Database node initialization on fresh environments
-      await fbPut(DB,got.etag);
-    }
+  if(got&&got.data){
+    const remote=ensureSchema(got.data);
+    if((remote.version||0)>=(DB.version||0)){DB=remote;lsSave(DB);renderAll();}
+    else await fbPut(DB,got.etag);
     setSS('ok','Synced '+new Date(DB.updatedAt).toLocaleTimeString());
   }else{
-    setSS('e','Cannot reach Firebase');
+    setSS(got?'ok':'e',got?'Synced':'Cannot reach Firebase');
   }
   startPoll();
 })();
