@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pirate Fleet Expedition</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* Ocean dark palette */
+  --bg:#080e18;
+  --s1:#0d1525;--s2:#111d33;--s3:#172340;
+  --bd:rgba(255,255,255,0.06);--bd2:rgba(255,255,255,0.11);--bd3:rgba(255,255,255,0.18);
+  --tx:#dde4f0;--mu:#6278a0;--fa:#1a2540;
+  /* Accent: amber lantern */
+  --am:#f0a840;--amb:rgba(240,168,64,0.14);--amt:#fde68a;
+  /* Ocean blue */
+  --oc:#3a9bdc;--ocb:rgba(58,155,220,0.14);--oct:#93c5fd;
+  /* Danger red */
+  --rd:#e85d5d;--rdb:rgba(232,93,93,0.14);--rdt:#ffaaaa;
+  /* Success green */
+  --gn:#52c97a;--gnb:rgba(82,201,122,0.14);--gnt:#86efac;
+  /* Ship gold */
+  --gl:#f5c842;--glb:rgba(245,200,66,0.14);--glt:#fde68a;
+  /* Landmark teal */
+  --lm:#2dd4bf;--lmb:rgba(45,212,191,0.14);--lmt:#99f6e4;
+  --r:8px;--rl:12px;
+  --font:'DM Sans',system-ui,sans-serif;
+  --display:'Cinzel',serif;
+  --mono:'DM Mono',monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;line-height:1.5;}
+
+/* ── SHELL ── */
+.shell{display:flex;flex-direction:column;min-height:100vh;}
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;background:var(--s1);border-bottom:1px solid var(--bd);gap:12px;flex-wrap:wrap;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{font-size:22px;}
+.logo h1{font-family:var(--display);font-size:15px;letter-spacing:.06em;color:var(--amt);}
+.logo h1 em{font-family:var(--font);font-style:normal;color:var(--mu);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0;}
+.spill{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--mu);font-family:var(--mono);}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--gn);flex-shrink:0;}
+.sdot.w{background:var(--am);}
+.sdot.e{background:var(--rd);}
+
+/* ── NAV ── */
+nav{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 18px;display:flex;overflow-x:auto;gap:0;}
+.ntab{padding:10px 16px;font-size:13px;font-weight:500;color:var(--mu);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .14s;margin-bottom:-1px;}
+.ntab:hover{color:var(--tx);}
+.ntab.on{color:var(--amt);border-bottom-color:var(--am);}
+
+/* ── CONTENT ── */
+.wrap{max-width:1100px;margin:0 auto;width:100%;padding:24px 18px 70px;}
+.view{display:none;}.view.on{display:block;}
+.ttl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:18px;}
+
+/* ── BUTTONS ── */
+.btn{padding:7px 14px;border-radius:var(--r);font-size:13px;font-family:var(--font);font-weight:500;cursor:pointer;border:1px solid var(--bd2);background:var(--s2);color:var(--tx);transition:background .13s,transform .1s;white-space:nowrap;}
+.btn:hover{background:var(--s3);}
+.btn:active{transform:scale(.97);}
+.btn.am{background:var(--amb);border-color:var(--am);color:var(--amt);}
+.btn.am:hover{background:rgba(240,168,64,.22);}
+.btn.oc{background:var(--ocb);border-color:var(--oc);color:var(--oct);}
+.btn.oc:hover{background:rgba(58,155,220,.22);}
+.btn.rd{background:var(--rdb);border-color:var(--rd);color:var(--rdt);}
+.btn.rd:hover{background:rgba(232,93,93,.22);}
+.btn.gn{background:var(--gnb);border-color:var(--gn);color:var(--gnt);}
+.btn.gn:hover{background:rgba(82,201,122,.22);}
+.btn.gl{background:var(--glb);border-color:var(--gl);color:var(--glt);}
+.btn.gl:hover{background:rgba(245,200,66,.22);}
+.btn.sm{padding:5px 10px;font-size:11px;}
+.btn.lg{padding:11px 24px;font-size:14px;font-weight:600;}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+
+/* ── VOYAGE VIEW LAYOUT ── */
+.voyage-layout{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;}
+@media(max-width:860px){.voyage-layout{grid-template-columns:1fr;}}
+
+/* ── SEA GRID ── */
+.grid-wrap{background:var(--s1);border:1px solid var(--bd2);border-radius:var(--rl);overflow:hidden;}
+.grid-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bd);}
+.grid-header h3{font-family:var(--display);font-size:13px;color:var(--amt);letter-spacing:.05em;}
+.grid-outer{padding:12px;overflow-x:auto;}
+.sea-grid{display:grid;gap:2px;width:max-content;}
+.col-labels{display:grid;gap:2px;margin-left:28px;margin-bottom:2px;}
+.col-label{width:36px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--mu);}
+.grid-row{display:flex;gap:2px;align-items:center;}
+.row-label{width:24px;height:36px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--mu);flex-shrink:0;}
+.cell{
+  width:36px;height:36px;border-radius:4px;cursor:pointer;
+  background:var(--s2);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  transition:background .1s,border-color .1s,transform .1s;
+  position:relative;flex-shrink:0;
+  /* ocean wave subtle gradient */
+  background-image:linear-gradient(135deg,rgba(58,155,220,.06) 0%,transparent 60%);
+}
+.cell:hover{background:var(--s3);border-color:var(--bd2);transform:scale(1.08);z-index:2;}
+.cell.start-select:hover{border-color:var(--am);background:var(--amb);}
+/* States */
+.cell.ship{background:rgba(245,200,66,.18);border-color:var(--gl);}
+.cell.ship::after{content:'⚓';font-size:14px;}
+.cell.landmark{background:var(--lmb);border-color:var(--lm);}
+.cell.landmark::after{content:'🏝';font-size:13px;}
+.cell.start{background:rgba(240,168,64,.25);border-color:var(--am);border-width:2px;}
+.cell.visited{background:rgba(58,155,220,.2);border-color:var(--oc);}
+.cell.hit{background:rgba(232,93,93,.3);border-color:var(--rd);border-width:2px;animation:hitpulse .4s ease;}
+.cell.hit::after{content:'💥';font-size:14px;}
+.cell.current{border-color:var(--am);border-width:2px;background:rgba(240,168,64,.3);animation:pulse 1.2s infinite;}
+.cell.current.hit{border-color:var(--rd);}
+.cell.trail{background:rgba(58,155,220,.12);border-color:rgba(58,155,220,.3);}
+/* ship+hit overlap */
+.cell.ship.hit::after{content:'💥';}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(240,168,64,.5);}50%{box-shadow:0 0 0 5px rgba(240,168,64,0);}}
+@keyframes hitpulse{0%{transform:scale(1.15);}100%{transform:scale(1);}}
+
+/* ── CONTROL PANEL ── */
+.panel{display:flex;flex-direction:column;gap:14px;}
+.phase-badge{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 12px;
+  border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.04em;
+  background:var(--amb);border:1px solid var(--am);color:var(--amt);
+}
+.phase-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--am);animation:pulse 1.2s infinite;}
+
+/* Team select */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;}
+.tbtn{
+  background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);
+  padding:8px 10px;cursor:pointer;font-family:var(--font);font-size:12px;font-weight:500;
+  color:var(--tx);transition:border-color .13s,background .13s;display:flex;align-items:center;gap:6px;
+}
+.tbtn:hover{background:var(--s3);border-color:var(--bd2);}
+.tbtn.sel{border-color:var(--am);background:var(--amb);color:var(--amt);}
+.tbtn .tsub{font-family:var(--mono);font-size:10px;color:var(--mu);margin-left:auto;}
+
+/* Steps input */
+.steps-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.step-counter{
+  flex:1;min-width:120px;text-align:center;
+  background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);
+  padding:10px;font-family:var(--mono);font-size:28px;font-weight:600;color:var(--amt);
+}
+.step-counter input{background:none;border:none;outline:none;font:inherit;color:inherit;width:100%;text-align:center;}
+.step-label{font-size:10px;color:var(--mu);margin-top:2px;letter-spacing:.06em;text-transform:uppercase;}
+
+/* Direction pad */
+.dpad-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.dpad-row{display:flex;gap:4px;}
+.dpad{
+  width:56px;height:56px;border-radius:var(--r);font-size:22px;
+  background:var(--s2);border:1px solid var(--bd2);color:var(--tx);
+  cursor:pointer;transition:background .12s,transform .1s;display:flex;align-items:center;justify-content:center;
+}
+.dpad:hover:not(:disabled){background:var(--amb);border-color:var(--am);transform:scale(1.08);}
+.dpad:active:not(:disabled){transform:scale(.96);}
+.dpad:disabled{opacity:.2;cursor:not-allowed;}
+.dpad-center{width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mu);font-family:var(--mono);}
+
+/* Info boxes */
+.info-row{display:flex;gap:8px;flex-wrap:wrap;}
+.info-box{flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;text-align:center;}
+.info-box .val{font-size:22px;font-weight:600;font-family:var(--mono);color:var(--amt);}
+.info-box .lbl{font-size:10px;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin-top:2px;}
+
+/* Voyage log */
+.vlog{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);max-height:160px;overflow-y:auto;font-family:var(--mono);font-size:11px;}
+.vlog-row{display:flex;gap:8px;padding:6px 10px;border-bottom:1px solid var(--bd);}
+.vlog-row:last-child{border:none;}
+.vlog-step{color:var(--mu);flex-shrink:0;min-width:28px;}
+.vlog-msg{color:var(--tx);flex:1;}
+.vlog-msg.hit{color:var(--rdt);}
+.vlog-msg.done{color:var(--gnt);}
+
+/* ── SETTINGS GRID ── */
+.settings-layout{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start;}
+@media(max-width:860px){.settings-layout{grid-template-columns:1fr;}}
+.mini-grid-wrap{background:var(--s1);border:1px solid var(--bd2);border-radius:var(--rl);overflow:hidden;padding:12px;}
+.mini-grid-outer{overflow-x:auto;}
+.mini-cell{
+  width:32px;height:32px;border-radius:3px;cursor:pointer;
+  background:var(--s2);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  transition:background .1s,border-color .1s;flex-shrink:0;
+  background-image:linear-gradient(135deg,rgba(58,155,220,.05) 0%,transparent 60%);
+}
+.mini-cell:hover{background:var(--s3);border-color:var(--bd2);}
+.mini-cell.ship{background:rgba(245,200,66,.18);border-color:var(--gl);}
+.mini-cell.ship::after{content:'⚓';}
+.mini-cell.landmark{background:var(--lmb);border-color:var(--lm);}
+.mini-cell.landmark::after{content:'🏝';}
+.mini-col-labels{display:grid;gap:2px;margin-left:24px;margin-bottom:2px;}
+.mini-col-label{width:32px;height:14px;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--mono);color:var(--mu);}
+.mini-row{display:flex;gap:2px;align-items:center;}
+.mini-row-label{width:20px;height:32px;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:var(--mono);color:var(--mu);flex-shrink:0;}
+
+/* Palette picker */
+.palette{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.pal-opt{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s,border-color .12s;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.pal-opt:hover{transform:scale(1.15);}
+.pal-opt.sel{border-color:white;}
+.tool-info{font-size:11px;color:var(--mu);margin-top:6px;}
+
+/* Team name editor */
+.tname-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;}
+.tname-field{display:flex;flex-direction:column;gap:4px;}
+.tname-field label{font-size:10px;color:var(--mu);letter-spacing:.04em;}
+.tname-field input{background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:7px 10px;color:var(--tx);font-family:var(--font);font-size:13px;}
+.tname-field input:focus{outline:none;border-color:var(--am);}
+
+/* ── LEADERBOARD ── */
+.lb{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;}
+.lbrow{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--bd);transition:background .1s;}
+.lbrow:last-child{border:none;}
+.lbrow:hover{background:var(--s2);}
+.lbrk{font-size:16px;width:28px;text-align:center;flex-shrink:0;font-family:var(--mono);font-weight:600;color:var(--mu);}
+.lbrk.m{font-size:20px;}
+.lbname{font-weight:500;font-size:14px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.lbstats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.lbstat{font-size:11px;font-family:var(--mono);padding:2px 8px;border-radius:12px;}
+.lbpts{font-size:18px;font-weight:600;font-family:var(--mono);text-align:right;min-width:50px;color:var(--glt);}
+.lbpts small{font-size:10px;color:var(--mu);font-weight:400;display:block;text-align:right;}
+
+/* toast */
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(50px);background:var(--s2);border:1px solid var(--bd2);border-radius:20px;padding:7px 18px;font-size:12px;color:var(--tx);opacity:0;pointer-events:none;z-index:300;white-space:nowrap;transition:transform .2s,opacity .2s;}
+#toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
+#conflict-banner{display:none;position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#2a1f06;border:1px solid var(--am);border-radius:var(--rl);padding:10px 16px;font-size:12px;color:var(--amt);z-index:400;max-width:380px;text-align:center;}
+#conflict-banner.on{display:block;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--fa);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏴‍☠️</div>
+    <h1>Pirate Fleet Expedition <em>Voyage Controller</em></h1>
+  </div>
+  <div class="spill"><div class="sdot w" id="sdot"></div><span id="slabel">Connecting…</span></div>
+</header>
+
+<nav>
+  <div class="ntab on"  onclick="go('voyage')">⚓ Voyage</div>
+  <div class="ntab"     onclick="go('board')">🏆 Leaderboard</div>
+  <div class="ntab"     onclick="go('settings')">⚙️ Settings</div>
+</nav>
+
+<div id="conflict-banner">⚠️ Write conflict — merged and retried automatically.</div>
+<div id="toast"></div>
+
+<div class="wrap">
+
+<!-- ═══════════ VOYAGE TAB ═══════════ -->
+<div id="view-voyage" class="view on">
+  <div class="voyage-layout">
+
+    <!-- LEFT: Sea grid -->
+    <div class="grid-wrap">
+      <div class="grid-header">
+        <h3>🗺 Sea Chart</h3>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <span id="grid-phase-label" style="font-size:11px;color:var(--mu);"></span>
+          <button class="btn sm am" onclick="resetVoyage()" id="reset-voyage-btn" style="display:none;">New Voyage</button>
+        </div>
+      </div>
+      <div class="grid-outer">
+        <div id="col-labels" class="col-labels" style="display:grid;grid-template-columns:repeat(10,36px);gap:2px;margin-left:28px;margin-bottom:2px;"></div>
+        <div id="sea-grid"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Control panel -->
+    <div class="panel">
+
+      <!-- Phase badge -->
+      <div>
+        <div class="phase-badge" id="phase-badge"><div class="dot"></div><span id="phase-text">Ready to sail</span></div>
+      </div>
+
+      <!-- Step 1: Team -->
+      <div class="card" id="panel-team">
+        <div class="ttl" style="margin-bottom:10px;">① Select crew</div>
+        <div class="team-grid" id="team-grid"></div>
+      </div>
+
+      <!-- Step 2: Steps -->
+      <div class="card" id="panel-steps" style="opacity:.4;pointer-events:none;">
+        <div class="ttl" style="margin-bottom:10px;">② Sailing points</div>
+        <div class="steps-row">
+          <div class="step-counter">
+            <input type="number" id="steps-inp" value="40" min="1" max="999" oninput="updateStepPreview()">
+            <div class="step-label">steps to spend</div>
+          </div>
+          <button class="btn am" onclick="confirmSteps()">Set ⚓</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Start position (shown after steps set) -->
+      <div class="card" id="panel-start" style="display:none;">
+        <div class="ttl" style="margin-bottom:6px;">③ Choose starting square</div>
+        <p style="font-size:12px;color:var(--mu);">Click any square on the sea chart to place your ship.</p>
+        <div id="start-chosen" style="font-size:12px;color:var(--amt);margin-top:6px;font-family:var(--mono);"></div>
+      </div>
+
+      <!-- Step 4: Navigation (shown after start chosen) -->
+      <div class="card" id="panel-nav" style="display:none;">
+        <div class="ttl" style="margin-bottom:10px;">④ Navigate</div>
+        <div class="info-row" style="margin-bottom:14px;">
+          <div class="info-box"><div class="val" id="steps-left">0</div><div class="lbl">Steps left</div></div>
+          <div class="info-box"><div class="val" id="ships-found" style="color:var(--glt);">0</div><div class="lbl">Ships found</div></div>
+          <div class="info-box"><div class="val" id="pos-display" style="font-size:16px;">—</div><div class="lbl">Position</div></div>
+        </div>
+        <div class="dpad-wrap">
+          <div class="dpad-row">
+            <div style="width:56px;height:56px;"></div>
+            <button class="dpad" id="d-up"    onclick="move('up')">▲</button>
+            <div style="width:56px;height:56px;"></div>
+          </div>
+          <div class="dpad-row">
+            <button class="dpad" id="d-left"  onclick="move('left')">◀</button>
+            <div class="dpad-center" id="dpad-steps"></div>
+            <button class="dpad" id="d-right" onclick="move('right')">▶</button>
+          </div>
+          <div class="dpad-row">
+            <div style="width:56px;height:56px;"></div>
+            <button class="dpad" id="d-down"  onclick="move('down')">▼</button>
+            <div style="width:56px;height:56px;"></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="ttl" style="margin-bottom:6px;">Voyage log</div>
+          <div class="vlog" id="vlog"></div>
+        </div>
+      </div>
+
+      <!-- Voyage complete -->
+      <div class="card" id="panel-done" style="display:none;border-color:var(--gn);">
+        <div style="text-align:center;padding:10px 0;">
+          <div style="font-size:28px;margin-bottom:8px;">🏴‍☠️</div>
+          <div style="font-family:var(--display);font-size:14px;color:var(--glt);letter-spacing:.06em;">Voyage Complete!</div>
+          <div style="font-size:12px;color:var(--mu);margin-top:6px;" id="done-summary"></div>
+          <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn am" onclick="addBonusPoints()">+ Bonus Points</button>
+            <button class="btn gn" onclick="resetVoyage()">Next Crew</button>
+          </div>
+          <div id="bonus-input" style="display:none;margin-top:10px;display:none;">
+            <div style="display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;">
+              <input type="number" id="bonus-val" value="0" min="0" style="width:80px;text-align:center;background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:6px;font-family:var(--mono);font-size:16px;font-weight:600;color:var(--amt);">
+              <button class="btn am" onclick="confirmBonus()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LEADERBOARD TAB ═══════════ -->
+<div id="view-board" class="view">
+  <div class="ttl" style="margin-bottom:14px;">Teams ranked by total points</div>
+  <div class="lb" id="lb"></div>
+</div>
+
+<!-- ═══════════ SETTINGS TAB ═══════════ -->
+<div id="view-settings" class="view">
+  <div class="settings-layout">
+
+    <!-- Left: grid editor -->
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="ttl" style="margin-bottom:10px;">Fleet map editor — 10×10 grid</div>
+        <p style="font-size:12px;color:var(--mu);margin-bottom:14px;">Click cells to place/remove ships and landmarks. Changes sync to all devices instantly.</p>
+
+        <div class="ttl" style="margin-bottom:8px;">Active tool</div>
+        <div class="palette">
+          <div class="pal-opt sel" id="tool-ship" onclick="setTool('ship')" title="Battleship" style="background:var(--glb);border-color:var(--gl);">⚓</div>
+          <div class="pal-opt" id="tool-landmark" onclick="setTool('landmark')" title="Landmark" style="background:var(--lmb);border-color:var(--lm);">🏝</div>
+          <div class="pal-opt" id="tool-clear" onclick="setTool('clear')" title="Clear cell" style="background:var(--s2);border-color:var(--bd2);">✕</div>
+        </div>
+        <div class="tool-info" id="tool-info">Tool: Place battleship (⚓) — click cells to toggle</div>
+
+        <div class="mini-grid-wrap" style="margin-top:14px;">
+          <div class="mini-grid-outer">
+            <div id="mini-col-labels" style="display:grid;grid-template-columns:repeat(10,32px);gap:2px;margin-left:22px;margin-bottom:2px;"></div>
+            <div id="mini-grid"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn am" onclick="clearFleet('ship')">Clear all ships</button>
+          <button class="btn" onclick="clearFleet('landmark')">Clear landmarks</button>
+          <button class="btn rd" onclick="clearFleet('all')">Clear all</button>
+        </div>
+
+        <div style="margin-top:12px;font-size:11px;color:var(--mu);">
+          <span id="ship-count-label"></span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="ttl" style="margin-bottom:10px;">Edit team names</div>
+        <div class="tname-grid" id="tname-grid"></div>
+        <div style="margin-top:12px;"><button class="btn am" onclick="saveTeamNames()">Save names</button></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="ttl" style="margin-bottom:10px;">Danger zone</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn rd" onclick="resetAllVoyages()">Reset all voyages</button>
+          <button class="btn rd" onclick="resetAllPoints()">Reset all points</button>
+          <button class="btn rd" onclick="resetEverything()">Reset everything</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: ship legend + stats -->
+    <div>
+      <div class="card" style="margin-bottom:14px;">
+        <div class="ttl" style="margin-bottom:10px;">Legend</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">⚓</span><span>Battleship square — 1 point when discovered</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🏝</span><span>Landmark — visible on map, no points</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:3px;background:rgba(240,168,64,.3);border:2px solid var(--am);flex-shrink:0;"></div><span>Ship's starting position</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><div style="width:20px;height:20px;border-radius:3px;background:rgba(58,155,220,.2);border:1px solid var(--oc);flex-shrink:0;"></div><span>Sailed-through squares</span></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">💥</span><span>Ship discovered!</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ttl" style="margin-bottom:10px;">Fleet stats</div>
+        <div id="fleet-stats" style="font-size:13px;color:var(--mu);line-height:1.9;font-family:var(--mono);"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /wrap -->
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════════════
+const COLS = ['A','B','C','D','E','F','G','H','I','J'];
+const ROWS = [1,2,3,4,5,6,7,8,9,10];
+const GRID_SIZE = 10;
+const FB_BASE = 'https://ahis-lsc-2627-d2-default-rtdb.asia-southeast1.firebasedatabase.app/pirate_fleet';
+const DEFAULT_TEAMS = [
+  'The Kraken','Sea Wolves','Storm Crows','Iron Anchors','Tide Breakers',
+  'Reef Hunters','Deep Raiders','Coral Cutters','Wave Riders','Dusk Pirates',
+  'Black Pearl','Salt Dogs','Night Owls','Fog Runners','Thunder Bay',
+  'Red Sails','Cape Fear','Bone Isle','Shark Bay','Ghost Ship'
+];
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let DB = null;
+let fbPoll = null;
+let isSaving = false;
+
+// Voyage session state (not persisted between page loads for a team)
+let voyage = {
+  teamId: null,
+  steps: 0,
+  stepsLeft: 0,
+  startPos: null,   // {r,c}
+  currentPos: null, // {r,c}
+  trail: [],        // [{r,c}] positions visited
+  hits: [],         // [{r,c}] ships found
+  log: [],          // log entries
+  phase: 'select-team', // select-team | set-steps | choose-start | navigate | done
+};
+
+// Settings tool
+let activeTool = 'ship';
+
+// ═══════════════════════════════════════════════════════════════
+// DEFAULT DATA
+// ═══════════════════════════════════════════════════════════════
+function mkDefault() {
+  const teams = DEFAULT_TEAMS.map((name, i) => ({
+    id: i, name, points: 0, shipsFound: 0, stepsUsed: 0, voyagesDone: 0
+  }));
+  // grid: flat array of 100 items. values: null | 'ship' | 'landmark'
+  const grid = Array(100).fill(null);
+  return { teams, grid, version: 0, updatedAt: Date.now() };
+}
+
+function ensureSchema(d) {
+  if (!d) return mkDefault();
+  if (!d.grid || d.grid.length !== 100) d.grid = Array(100).fill(null);
+  if (typeof d.version !== 'number') d.version = 0;
+  d.teams = (d.teams || []).map(t => ({
+    id: t.id, name: t.name || DEFAULT_TEAMS[t.id] || 'Team '+(t.id+1),
+    points: t.points || 0,
+    shipsFound: t.shipsFound || 0,
+    stepsUsed: t.stepsUsed || 0,
+    voyagesDone: t.voyagesDone || 0,
+  }));
+  return d;
+}
+
+function cellIdx(r, c) { return r * GRID_SIZE + c; }
+function cellKey(r, c) { return COLS[c] + (r + 1); }
+function parseKey(key) {
+  const c = COLS.indexOf(key[0]);
+  const r = parseInt(key.slice(1)) - 1;
+  return { r, c };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LOCAL STORAGE
+// ═══════════════════════════════════════════════════════════════
+function lsLoad() { try { const r = localStorage.getItem('pf1'); return r ? JSON.parse(r) : null; } catch(e) { return null; } }
+function lsSave(d) { try { localStorage.setItem('pf1', JSON.stringify(d)); } catch(e) {} }
+
+// ═══════════════════════════════════════════════════════════════
+// FIREBASE — ETag-based optimistic concurrency
+// ═══════════════════════════════════════════════════════════════
+async function fbGet() {
+  try {
+    const r = await fetch(FB_BASE + '.json', { headers: { Accept: 'application/json' } });
+    if (!r.ok) return null;
+    const etag = r.headers.get('ETag') || '';
+    const data = await r.json();
+    return { data, etag };
+  } catch(e) { return null; }
+}
+
+async function fbPut(data, etag) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (etag) headers['If-Match'] = etag;
+  try {
+    const r = await fetch(FB_BASE + '.json', { method: 'PUT', headers, body: JSON.stringify(data) });
+    if (r.status === 412) return { ok: false, conflict: true };
+    if (!r.ok) return { ok: false, err: r.status };
+    const newEtag = r.headers.get('ETag') || '';
+    const newData = await r.json();
+    return { ok: true, data: newData, etag: newEtag };
+  } catch(e) { return { ok: false, err: e.message }; }
+}
+
+function applyOp(state, op) {
+  const s = JSON.parse(JSON.stringify(state));
+  if (op.type === 'setGrid') {
+    s.grid[op.idx] = op.val;
+  } else if (op.type === 'clearGrid') {
+    if (op.target === 'all') s.grid = Array(100).fill(null);
+    else s.grid = s.grid.map(v => v === op.target ? null : v);
+  } else if (op.type === 'recordVoyage') {
+    const t = s.teams.find(x => x.id === op.teamId);
+    if (t) {
+      t.points = +((t.points || 0) + op.points).toFixed(2);
+      t.shipsFound = (t.shipsFound || 0) + op.shipsFound;
+      t.stepsUsed = (t.stepsUsed || 0) + op.stepsUsed;
+      t.voyagesDone = (t.voyagesDone || 0) + 1;
+    }
+  } else if (op.type === 'addPoints') {
+    const t = s.teams.find(x => x.id === op.teamId);
+    if (t) t.points = +((t.points || 0) + op.points).toFixed(2);
+  } else if (op.type === 'renameTeams') {
+    op.names.forEach(({ id, name }) => { const t = s.teams.find(x => x.id === id); if (t) t.name = name; });
+  } else if (op.type === 'resetVoyages') {
+    s.teams.forEach(t => { t.shipsFound = 0; t.stepsUsed = 0; t.voyagesDone = 0; });
+  } else if (op.type === 'resetPoints') {
+    s.teams.forEach(t => { t.points = 0; });
+  } else if (op.type === 'resetAll') {
+    const fresh = mkDefault(); s.teams = fresh.teams; s.grid = fresh.grid;
+  }
+  s.version = (s.version || 0) + 1;
+  s.updatedAt = Date.now();
+  return s;
+}
+
+async function atomicWrite(op, maxRetries = 5) {
+  isSaving = true; setSS('w', 'Saving…');
+  for (let i = 0; i < maxRetries; i++) {
+    const got = await fbGet();
+    if (!got) {
+      DB = applyOp(DB, op); lsSave(DB);
+      isSaving = false; setSS('e', 'Offline — local only');
+      renderAll(); return false;
+    }
+    const remote = ensureSchema(got.data);
+    const merged = applyOp(remote, op);
+    const res = await fbPut(merged, got.etag);
+    if (res.ok) {
+      DB = ensureSchema(res.data || merged); lsSave(DB);
+      isSaving = false; setSS('ok', 'Synced ' + new Date(DB.updatedAt).toLocaleTimeString());
+      renderAll(); return true;
+    }
+    if (res.conflict) {
+      showConflict();
+      await sleep(80 + Math.random() * 150);
+    } else { isSaving = false; setSS('e', 'Error'); return false; }
+  }
+  isSaving = false; setSS('e', 'Conflict — retry');
+  return false;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function startPoll() {
+  if (fbPoll) clearInterval(fbPoll);
+  fbPoll = setInterval(async () => {
+    if (isSaving) return;
+    const got = await fbGet();
+    if (!got) return;
+    const remote = ensureSchema(got.data);
+    if ((remote.version || 0) > (DB.version || 0)) {
+      DB = remote; lsSave(DB); renderAll();
+      setSS('ok', 'Synced ' + new Date(DB.updatedAt).toLocaleTimeString());
+    }
+  }, 3500);
+}
+
+function setSS(s, lbl) {
+  document.getElementById('sdot').className = 'sdot' + (s==='ok' ? '' : s==='w' ? ' w' : ' e');
+  document.getElementById('slabel').textContent = lbl;
+}
+
+let conflictTimer;
+function showConflict() {
+  const b = document.getElementById('conflict-banner');
+  b.classList.add('on'); clearTimeout(conflictTimer);
+  conflictTimer = setTimeout(() => b.classList.remove('on'), 3500);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+const VIEWS = ['voyage', 'board', 'settings'];
+function go(v) {
+  document.querySelectorAll('.ntab').forEach((el, i) => el.classList.toggle('on', VIEWS[i] === v));
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('on'));
+  document.getElementById('view-' + v).classList.add('on');
+  if (v === 'board') renderBoard();
+  if (v === 'settings') { renderMiniGrid(); renderTnameGrid(); renderFleetStats(); }
+  if (v === 'voyage') renderSeaGrid();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SEA GRID RENDER
+// ═══════════════════════════════════════════════════════════════
+function renderSeaGrid() {
+  // Column labels
+  const colLabels = document.getElementById('col-labels');
+  colLabels.innerHTML = COLS.map(c => `<div class="col-label">${c}</div>`).join('');
+
+  const grid = document.getElementById('sea-grid');
+  grid.innerHTML = '';
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'grid-row';
+    const rl = document.createElement('div');
+    rl.className = 'row-label';
+    rl.textContent = r + 1;
+    rowDiv.appendChild(rl);
+
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.id = `cell-${r}-${c}`;
+
+      // Base type — only show landmarks publicly, ships are hidden
+      const cellVal = DB.grid[cellIdx(r, c)];
+      if (cellVal === 'landmark') cell.classList.add('landmark');
+      // ships are hidden during voyage
+
+      // Voyage overlays
+      const key = cellKey(r, c);
+      const isStart = voyage.startPos && voyage.startPos.r === r && voyage.startPos.c === c;
+      const isTrail = voyage.trail.some(p => p.r === r && p.c === c);
+      const isHit = voyage.hits.some(p => p.r === r && p.c === c);
+      const isCurrent = voyage.currentPos && voyage.currentPos.r === r && voyage.currentPos.c === c;
+
+      if (isHit) cell.classList.add('hit');
+      else if (isTrail) cell.classList.add('trail');
+      if (isStart) cell.classList.add('start');
+      if (isCurrent) cell.classList.add('current');
+
+      // Click handler
+      cell.addEventListener('click', () => onCellClick(r, c));
+      rowDiv.appendChild(cell);
+    }
+    grid.appendChild(rowDiv);
+  }
+}
+
+function onCellClick(r, c) {
+  if (voyage.phase === 'choose-start') {
+    setStart(r, c);
+  }
+  // other phases: no click action on main grid
+}
+
+function updateCellClass(r, c) {
+  const cell = document.getElementById(`cell-${r}-${c}`);
+  if (!cell) return;
+  cell.className = 'cell';
+  const cellVal = DB.grid[cellIdx(r, c)];
+  if (cellVal === 'landmark') cell.classList.add('landmark');
+  const isStart = voyage.startPos && voyage.startPos.r === r && voyage.startPos.c === c;
+  const isTrail = voyage.trail.some(p => p.r === r && p.c === c);
+  const isHit = voyage.hits.some(p => p.r === r && p.c === c);
+  const isCurrent = voyage.currentPos && voyage.currentPos.r === r && voyage.currentPos.c === c;
+  if (isHit) cell.classList.add('hit');
+  else if (isTrail) cell.classList.add('trail');
+  if (isStart) cell.classList.add('start');
+  if (isCurrent) cell.classList.add('current');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VOYAGE FLOW
+// ═══════════════════════════════════════════════════════════════
+function renderTeamPanel() {
+  const gs = document.getElementById('team-grid');
+  gs.innerHTML = DB.teams.map(t => `
+    <button class="tbtn${voyage.teamId === t.id ? ' sel' : ''}" onclick="selectTeam(${t.id})">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${t.name}</span>
+      <span class="tsub">${(t.points||0).toFixed(0)}pt</span>
+    </button>`).join('');
+}
+
+function selectTeam(id) {
+  voyage.teamId = id;
+  voyage.phase = 'set-steps';
+  const t = DB.teams.find(x => x.id === id);
+  setPhaseText('Crew: ' + t.name);
+  document.getElementById('panel-steps').style.opacity = '1';
+  document.getElementById('panel-steps').style.pointerEvents = 'auto';
+  renderTeamPanel();
+}
+
+function updateStepPreview() {
+  // just live update — no action needed until Set
+}
+
+function confirmSteps() {
+  const v = parseInt(document.getElementById('steps-inp').value) || 0;
+  if (v < 1) { toast('Enter at least 1 step'); return; }
+  voyage.steps = v;
+  voyage.stepsLeft = v;
+  voyage.phase = 'choose-start';
+  document.getElementById('panel-start').style.display = 'block';
+  setPhaseText('Click a square to start');
+  // Make cells show start-select cursor
+  document.querySelectorAll('.cell').forEach(el => el.classList.add('start-select'));
+  document.getElementById('grid-phase-label').textContent = 'Click to place your ship';
+  updateGridLabels();
+}
+
+function setStart(r, c) {
+  voyage.startPos = { r, c };
+  voyage.currentPos = { r, c };
+  voyage.trail = [{ r, c }];
+  voyage.phase = 'navigate';
+  // Remove start-select cursor
+  document.querySelectorAll('.cell').forEach(el => el.classList.remove('start-select'));
+  document.getElementById('panel-start').style.display = 'none';
+  document.getElementById('panel-nav').style.display = 'block';
+  document.getElementById('reset-voyage-btn').style.display = 'inline-flex';
+  setPhaseText('Navigating');
+  document.getElementById('start-chosen').textContent = '';
+  document.getElementById('grid-phase-label').textContent = '';
+
+  // Check if start is a ship
+  const cellVal = DB.grid[cellIdx(r, c)];
+  if (cellVal === 'ship') {
+    voyage.hits.push({ r, c });
+    addVoyageLog(`Started at ${cellKey(r,c)} — SHIP FOUND! 💥`, 'hit');
+  } else {
+    addVoyageLog(`Started at ${cellKey(r,c)}`, '');
+  }
+
+  renderSeaGrid();
+  updateNavPanel();
+}
+
+function move(dir) {
+  if (voyage.stepsLeft <= 0 || voyage.phase !== 'navigate') return;
+  const { r, c } = voyage.currentPos;
+  let nr = r, nc = c;
+  if (dir === 'up')    nr = r - 1;
+  if (dir === 'down')  nr = r + 1;
+  if (dir === 'left')  nc = c - 1;
+  if (dir === 'right') nc = c + 1;
+
+  if (nr < 0 || nr >= GRID_SIZE || nc < 0 || nc >= GRID_SIZE) {
+    toast("Can't sail off the map!"); return;
+  }
+
+  // Mark old current as trail
+  updateCellClass(voyage.currentPos.r, voyage.currentPos.c);
+
+  voyage.currentPos = { r: nr, c: nc };
+  voyage.stepsLeft--;
+
+  const cellVal = DB.grid[cellIdx(nr, nc)];
+  const alreadyHit = voyage.hits.some(p => p.r === nr && p.c === nc);
+  let isNewHit = false;
+
+  if (cellVal === 'ship' && !alreadyHit) {
+    voyage.hits.push({ r: nr, c: nc });
+    isNewHit = true;
+  }
+
+  voyage.trail.push({ r: nr, c: nc });
+
+  if (isNewHit) {
+    addVoyageLog(`Moved ${dir.toUpperCase()} → ${cellKey(nr,nc)} — SHIP FOUND! 💥`, 'hit');
+    toast('⚓ Ship discovered at ' + cellKey(nr, nc) + '!');
+  } else {
+    addVoyageLog(`Moved ${dir.toUpperCase()} → ${cellKey(nr,nc)}`, '');
+  }
+
+  updateCellClass(nr, nc);
+  updateNavPanel();
+
+  if (voyage.stepsLeft === 0) {
+    finishVoyage();
+  }
+}
+
+function updateNavPanel() {
+  document.getElementById('steps-left').textContent = voyage.stepsLeft;
+  document.getElementById('ships-found').textContent = voyage.hits.length;
+  document.getElementById('pos-display').textContent = voyage.currentPos ? cellKey(voyage.currentPos.r, voyage.currentPos.c) : '—';
+  document.getElementById('dpad-steps').textContent = voyage.stepsLeft;
+
+  // Disable directions at boundaries
+  const { r, c } = voyage.currentPos || { r:0, c:0 };
+  const sl = voyage.stepsLeft;
+  document.getElementById('d-up').disabled    = sl===0 || r===0;
+  document.getElementById('d-down').disabled  = sl===0 || r===GRID_SIZE-1;
+  document.getElementById('d-left').disabled  = sl===0 || c===0;
+  document.getElementById('d-right').disabled = sl===0 || c===GRID_SIZE-1;
+}
+
+function addVoyageLog(msg, cls) {
+  voyage.log.unshift({ msg, cls, step: voyage.steps - voyage.stepsLeft });
+  renderVoyageLog();
+}
+
+function renderVoyageLog() {
+  const el = document.getElementById('vlog');
+  if (!el) return;
+  el.innerHTML = voyage.log.map(e =>
+    `<div class="vlog-row"><div class="vlog-step">${e.step}</div><div class="vlog-msg ${e.cls||''}">${e.msg}</div></div>`
+  ).join('');
+}
+
+function finishVoyage() {
+  voyage.phase = 'done';
+  document.getElementById('panel-nav').style.display = 'none';
+  document.getElementById('panel-done').style.display = 'block';
+  setPhaseText('Voyage complete!');
+
+  const pts = voyage.hits.length; // 1 point per ship square
+  const stepsUsed = voyage.steps - voyage.stepsLeft;
+  document.getElementById('done-summary').textContent =
+    `${DB.teams.find(t=>t.id===voyage.teamId)?.name} · ${pts} ship${pts!==1?'s':''} found · ${stepsUsed} steps used`;
+
+  // Save to Firebase
+  const op = {
+    type: 'recordVoyage',
+    teamId: voyage.teamId,
+    points: pts,
+    shipsFound: voyage.hits.length,
+    stepsUsed,
+  };
+  DB = applyOp(DB, op); lsSave(DB);
+  atomicWrite(op);
+  addVoyageLog(`Voyage done — ${pts} pts earned`, 'done');
+  renderVoyageLog();
+  updateNavPanel();
+}
+
+function addBonusPoints() {
+  const bi = document.getElementById('bonus-input');
+  bi.style.display = bi.style.display === 'none' || !bi.style.display ? 'block' : 'none';
+}
+
+function confirmBonus() {
+  const v = parseFloat(document.getElementById('bonus-val').value) || 0;
+  if (v === 0) { toast('Enter a bonus amount'); return; }
+  const op = { type: 'addPoints', teamId: voyage.teamId, points: v };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op);
+  toast(`+${v} bonus points added`);
+  document.getElementById('bonus-input').style.display = 'none';
+  document.getElementById('bonus-val').value = 0;
+  const t = DB.teams.find(x => x.id === voyage.teamId);
+  document.getElementById('done-summary').textContent =
+    `${t?.name} · ${voyage.hits.length} ship${voyage.hits.length!==1?'s':''} found · ${voyage.steps - voyage.stepsLeft} steps used · ${(t?.points||0).toFixed(0)}pts total`;
+}
+
+function resetVoyage() {
+  voyage = {
+    teamId: null, steps: 0, stepsLeft: 0,
+    startPos: null, currentPos: null,
+    trail: [], hits: [], log: [],
+    phase: 'select-team',
+  };
+  // Reset panels
+  document.getElementById('panel-steps').style.opacity = '0.4';
+  document.getElementById('panel-steps').style.pointerEvents = 'none';
+  document.getElementById('panel-start').style.display = 'none';
+  document.getElementById('panel-nav').style.display = 'none';
+  document.getElementById('panel-done').style.display = 'none';
+  document.getElementById('bonus-input').style.display = 'none';
+  document.getElementById('reset-voyage-btn').style.display = 'none';
+  document.getElementById('grid-phase-label').textContent = '';
+  document.getElementById('steps-inp').value = 40;
+  setPhaseText('Ready to sail');
+  renderTeamPanel();
+  renderSeaGrid();
+}
+
+function setPhaseText(t) {
+  document.getElementById('phase-text').textContent = t;
+}
+
+function updateGridLabels() {
+  // noop — labels already rendered
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LEADERBOARD
+// ═══════════════════════════════════════════════════════════════
+function renderBoard() {
+  const teams = [...DB.teams].sort((a, b) => (b.points||0) - (a.points||0));
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('lb').innerHTML = teams.map((t, i) => `
+    <div class="lbrow">
+      <div class="lbrk ${i<3?'m':''}">${i<3?medals[i]:i+1}</div>
+      <div class="lbname">${t.name}</div>
+      <div class="lbstats">
+        <span class="lbstat" style="background:var(--glb);color:var(--glt);">💥${t.shipsFound||0} ships</span>
+        <span class="lbstat" style="background:var(--ocb);color:var(--oct);">⚓${t.stepsUsed||0} steps</span>
+        <span class="lbstat" style="background:var(--s2);color:var(--mu);">${t.voyagesDone||0} voyages</span>
+      </div>
+      <div class="lbpts">${(t.points||0).toFixed(0)}<small>pts</small></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MINI GRID (SETTINGS EDITOR)
+// ═══════════════════════════════════════════════════════════════
+function renderMiniGrid() {
+  // Column labels
+  const ml = document.getElementById('mini-col-labels');
+  ml.innerHTML = COLS.map(c => `<div class="mini-col-label">${c}</div>`).join('');
+
+  const mg = document.getElementById('mini-grid');
+  mg.innerHTML = '';
+  for (let r = 0; r < GRID_SIZE; r++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'mini-row';
+    const rl = document.createElement('div');
+    rl.className = 'mini-row-label';
+    rl.textContent = r + 1;
+    rowDiv.appendChild(rl);
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'mini-cell';
+      cell.id = `mc-${r}-${c}`;
+      const val = DB.grid[cellIdx(r, c)];
+      if (val) cell.classList.add(val);
+      cell.addEventListener('click', () => toggleCell(r, c));
+      rowDiv.appendChild(cell);
+    }
+    mg.appendChild(rowDiv);
+  }
+  renderFleetStats();
+}
+
+function updateMiniCell(r, c) {
+  const cell = document.getElementById(`mc-${r}-${c}`);
+  if (!cell) return;
+  cell.className = 'mini-cell';
+  const val = DB.grid[cellIdx(r, c)];
+  if (val) cell.classList.add(val);
+}
+
+function toggleCell(r, c) {
+  const idx = cellIdx(r, c);
+  const current = DB.grid[idx];
+  let newVal = null;
+  if (activeTool === 'clear') newVal = null;
+  else if (activeTool === 'ship') newVal = current === 'ship' ? null : 'ship';
+  else if (activeTool === 'landmark') newVal = current === 'landmark' ? null : 'landmark';
+
+  const op = { type: 'setGrid', idx, val: newVal };
+  DB = applyOp(DB, op); lsSave(DB);
+  updateMiniCell(r, c);
+  updateCellClass(r, c); // also update main grid if visible
+  renderFleetStats();
+  atomicWrite(op);
+}
+
+function setTool(t) {
+  activeTool = t;
+  ['ship','landmark','clear'].forEach(x => {
+    document.getElementById('tool-'+x).classList.toggle('sel', x === t);
+  });
+  const infos = {
+    ship: 'Tool: Place battleship (⚓) — click cells to toggle',
+    landmark: 'Tool: Place landmark (🏝) — visible to all crews',
+    clear: 'Tool: Clear cell — click to remove anything',
+  };
+  document.getElementById('tool-info').textContent = infos[t];
+}
+
+function clearFleet(target) {
+  const label = target === 'all' ? 'everything' : target === 'ship' ? 'all ships' : 'all landmarks';
+  if (!confirm(`Clear ${label} from the grid?`)) return;
+  const op = { type: 'clearGrid', target };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op);
+  renderMiniGrid();
+  renderSeaGrid();
+}
+
+function renderFleetStats() {
+  const ships = DB.grid.filter(v => v === 'ship').length;
+  const landmarks = DB.grid.filter(v => v === 'landmark').length;
+  const el = document.getElementById('fleet-stats');
+  if (el) el.innerHTML =
+    `⚓ ${ships} ship square${ships!==1?'s':''}<br>🏝 ${landmarks} landmark${landmarks!==1?'s':''}<br>` +
+    `${100-ships-landmarks} empty squares`;
+  const sc = document.getElementById('ship-count-label');
+  if (sc) sc.textContent = `${ships} ship squares · ${landmarks} landmarks placed`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SETTINGS — TEAM NAMES
+// ═══════════════════════════════════════════════════════════════
+function renderTnameGrid() {
+  document.getElementById('tname-grid').innerHTML = DB.teams.map(t =>
+    `<div class="tname-field">
+      <label>Team ${t.id+1}</label>
+      <input type="text" id="tn-${t.id}" value="${t.name.replace(/"/g,'&quot;')}">
+    </div>`
+  ).join('');
+}
+
+function saveTeamNames() {
+  const names = DB.teams.map(t => {
+    const v = (document.getElementById('tn-'+t.id)?.value||'').trim();
+    return { id: t.id, name: v || t.name };
+  });
+  const op = { type: 'renameTeams', names };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op);
+  renderTeamPanel(); toast('Team names saved');
+}
+
+function resetAllVoyages() {
+  if (!confirm('Reset voyage stats (ships found, steps, voyages) for all teams?')) return;
+  const op = { type: 'resetVoyages' };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op); toast('Voyage stats reset');
+}
+function resetAllPoints() {
+  if (!confirm('Reset all points to 0?')) return;
+  const op = { type: 'resetPoints' };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op); toast('Points reset');
+}
+function resetEverything() {
+  if (!confirm('Reset EVERYTHING — grid, teams, points?')) return;
+  const op = { type: 'resetAll' };
+  DB = applyOp(DB, op); lsSave(DB); atomicWrite(op);
+  resetVoyage(); renderMiniGrid(); toast('Everything reset');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════════════
+function renderAll() {
+  renderTeamPanel();
+  renderSeaGrid();
+  renderBoard();
+  // Settings only re-renders when active to avoid overwriting in-progress edits
+  if (document.getElementById('view-settings').classList.contains('on')) {
+    renderMiniGrid(); renderTnameGrid(); renderFleetStats();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════
+let tt;
+function toast(m) {
+  const e = document.getElementById('toast');
+  e.textContent = m; e.classList.add('on');
+  clearTimeout(tt); tt = setTimeout(() => e.classList.remove('on'), 2600);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════════
+(async function boot() {
+  DB = ensureSchema(lsLoad() || mkDefault());
+  renderAll();
+  setSS('w', 'Connecting…');
+
+  const got = await fbGet();
+  if (got && got.data) {
+    const remote = ensureSchema(got.data);
+    if ((remote.version||0) >= (DB.version||0)) {
+      DB = remote; lsSave(DB); renderAll();
+    } else {
+      await fbPut(DB, got.etag);
+    }
+    setSS('ok', 'Synced ' + new Date(DB.updatedAt).toLocaleTimeString());
+  } else {
+    const r2 = await fbGet();
+    if (r2 && !r2.data) await fbPut(DB, '');
+    setSS(got ? 'ok' : 'e', got ? 'Synced' : 'Cannot reach Firebase');
+  }
+  startPoll();
+})();
+</script>
+</body>
+</html>
